@@ -1,0 +1,128 @@
+! -----------------------------------------------------------------------------
+!                      Test Project
+! This is a test project for the Sam.  It consists of a simple
+! chilled water plant with one chiller, one pump, a distribution
+! pipe, and a constant load.
+! -----------------------------------------------------------------------------
+
+! -----------------------------------------------------------------------------
+!                       Global
+! -----------------------------------------------------------------------------
+'Output File' 'File 1'
+'File Name'                  'Test.out'
+'Write to Terminal'          'False'
+'Objects'     ( 'Time Manager','Weather','CH1'  )
+;
+
+! -----------------------------------------------------------------------------
+!                       Nodes
+! -----------------------------------------------------------------------------
+
+'Node' 'N1'
+'Initial Temperature'        50.0  !Initial temp is 50
+;
+
+'Node' 'N2'
+'Initial Temperature'        50.0
+;
+
+'Node' 'N3'
+'Initial Temperature'        50.0
+;
+
+'Node' 'N4'
+'Initial Temperature'        50.0
+;
+
+! -----------------------------------------------------------------------------
+!                       Components
+! -----------------------------------------------------------------------------
+
+'Pump' 'CHWP 1'
+'Nominal Flow'               1700
+'Nominal Head'               80
+'Nominal Efficiency'         0.77
+'Motor Efficiency'           0.90
+'Controller'                 'CHWP 1 Controller'
+'Inlet Node'                 'N1'
+'Outlet Node'                'N2'
+;
+
+'Chiller' 'CH1'
+'Nominal Capacity'           850
+'Nominal kW-Per-Ton'         0.722
+'Nominal CHW Flow'           1700
+'Nominal Evap Head Loss'     11.6
+'Evap Friction Exponent'     1.85
+'Nominal CW Flow'            2250
+'Nominal Cond Head Loss'     11.5
+'Cond Friction Exponent'     1.85
+'Cool Cap fCHW&ECT'          'Centrifugal Cool Cap fCHW&ECT'
+'Cool EIR fCHW&ECT'          'Centrifugal Cool EIR fCHW&ECT'
+'Cool EIR fPLR&DT'           'Centrifugal Cool EIR fPLR&DT'
+'Controller'                 'CH1 Controller'
+'Evap Inlet Node'            'N1'
+'Evap Outlet Node'           'N2'
+;
+
+'Pipe' 'CHW Distribution'
+'Nominal Flow'               1700
+'Nominal Head Loss'          58.4
+'Friction Exponent'          1.85
+'UA'                         1.0
+'Environment Temperature'    70.0
+'Inlet Node'                 'N3'
+'Outlet Node'                'N4'
+;
+
+'Simple Coil' 'CHW Coil'
+'Nominal Flow'               4500
+'Nominal Head Loss'          10
+'Flow Curve'                 'Coil Flow fLoad'
+'Load'                       'Load 1'
+'Inlet Node'                 'N4'
+'Outlet Node'                'N1'
+;
+
+! -----------------------------------------------------------------------------
+!                       Controls
+! -----------------------------------------------------------------------------
+
+'Proportional Controller' 'CHW1 Controller'
+'Controller Action'          'Direct'
+'Throttle Range'             2.00
+'Min Output'                 0.00
+'Max Output'                 1.00
+'Setpoint'                   'CHW Setpoint'
+'Sensor'                     'CHWST Sensor'
+;
+
+'Proportional Controller' 'CHWP 1 Controller'
+'Controller Action'          'Reverse'
+'Throttle Range'             2.00
+'Min Output'                 0.00
+'Max Output'                 1.00
+'Setpoint'                   'DP Setpoint'
+'Sensor'                     'CHW DP Sensor'
+;
+
+'Temperature Sensor' 'CHWST Sensor'
+'Location'                   'N3'
+;
+
+'DP Sensor' 'CHW DP Sensor'
+'Inlet Node'                 'N4'
+'Outlet Node'                'N1'
+;
+
+'Constant Setpoint' 'CHW Setpoint'
+'Setpoint'                   44
+;
+
+! -----------------------------------------------------------------------------
+!                       Other Objects
+! -----------------------------------------------------------------------------
+
+'Constant Load' 'Load 1'
+'Load'                       450
+;
