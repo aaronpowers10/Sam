@@ -33,7 +33,6 @@ public class DelimiterParser implements Parser {
 	public DelimiterParser() {
 		CharacterParser bangParser = new CharacterParser("!");
 		StringParser newLineParser = new StringParser("\r\n");
-		//OrParser commentEndParser = new OrParser(new Parser[] { bangParser, newLineParser });
 		Parser commentEndParser = newLineParser;
 		FromToParser commentParser = new FromToParser(bangParser, commentEndParser);
 
